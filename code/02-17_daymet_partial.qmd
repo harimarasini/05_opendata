@@ -210,17 +210,27 @@ Let's inspect weather data for the first site-year.
 
 ```{r}
 
+daymet_all$weather[[1]]
+
 ```
 
 Now let's unnest the weather column.  
+
 ```{r}
-daymet_all_unnest 
+
+daymet_all_unnest <- daymet_all %>%
+  unnest(weather) %>% 
+  pivot_wider(names_from = measurement,
+              values_from = value) %>% 
+  janitor::clean_names()
 
 daymet_all_unnest
 
 ```
 
 How many rows? Why?  
+
+Ans: 254,770 rows after using pivot_wider, initially it was more than 1,000,000 rows with less columns. Now columns are more, rows are less whic makes easier in calculation.
 
 # Exporting  
 We don't want to have to make an API call every time we'll work with this weather data.  
@@ -229,6 +239,8 @@ Therefore, a best practice here is to pull weather data once and export it to fi
 
 Let's do that below:  
 ```{r}
+
+write_csv(daymet_all_unnest, "../data/fieldweatherdata.csv")
 
 ```
 
@@ -254,6 +266,8 @@ Some of the ones I used in the past:
   - **Elevation**: https://github.com/jhollist/elevatr  
   
 
+
+**Find open source data APIs for poultry**
 
 
 
